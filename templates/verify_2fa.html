@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка двухфакторной аутентификации</title>
+</head>
+<body>
+    <h1>Введите код аутентификации</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <p>Пожалуйста, введите код из вашего приложения аутентификации:</p>
+
+    <form method="post">
+        <input type="text" name="otp_code" placeholder="Код подтверждения" required autofocus>
+        <button type="submit">Подтвердить</button>
+    </form>
+</body>
+</html>

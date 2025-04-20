@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансовый менеджер{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        .flash-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .error {
+            background-color: #ffdddd;
+            border-left: 5px solid #f44336;
+        }
+        .success {
+            background-color: #ddffdd;
+            border-left: 5px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Финансовый менеджер</a>
+            <div class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <a class="nav-link" href="{{ url_for('profile') }}">Профиль</a>
+                    <a class="nav-link" href="{{ url_for('add_account') }}">Добавить счет</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('login') }}">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

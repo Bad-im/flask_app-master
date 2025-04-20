@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} - Профиль{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Профиль пользователя</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Информация</h5>
+            <p class="card-text">
+                Имя пользователя: {{ user.username }}<br>
+                Двухфакторная аутентификация: 
+                {% if user.is_2fa_enabled %}
+                    <span class="text-success">Включена</span>
+                {% else %}
+                    <span class="text-danger">Отключена</span>
+                {% endif %}
+            </p>
+            
+            {% if not user.is_2fa_enabled %}
+                <a href="{{ url_for('setup_2fa') }}" class="btn btn-primary">Настроить 2FA</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
