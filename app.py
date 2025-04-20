@@ -1,13 +1,15 @@
 import hashlib
 import os
 import base64
+from datetime import datetime
+
 import pyotp
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
-from datetime import datetime
+
 
 # Инициализация базовых объектов
 db = SQLAlchemy()
@@ -180,12 +182,17 @@ def logout():
 @login_required
 def add_account():
     if request.method == 'POST':
-        name = request.form.get('name')
+        # Уязвимость: прямое использование пользовательского ввода без санитизации
+        name = request.form.get('name')  # Опасный способ (для демонстрации XSS)
+        # Безопасная альтернатива:
+        # from markupsafe import escape
+        # name = escape(request.form.get('name'))
+        
         balance = float(request.form.get('balance'))
         currency = request.form.get('currency')
 
         new_account = Account(
-            name=name,
+            name=name,  # Здесь может быть внедрен XSS-код
             balance=balance,
             currency=currency,
             user_id=current_user.id
@@ -247,3 +254,4 @@ if __name__ == '__main__':
             db.session.commit()
 
     app.run(debug=True)
+    
